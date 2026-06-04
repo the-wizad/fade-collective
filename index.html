@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE FADE COLLECTIVE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --orange: #E8520A;
+      --lime: #B5D215;
+      --black: #080808;
+      --dark: #0f0f0f;
+      --card: #141414;
+      --border: #222222;
+      --text: #d4d4d4;
+      --muted: #666;
+      --white: #f0f0f0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* GRAIN OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.032;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.12em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--orange); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--lime); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 2.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(6rem, 18vw, 22rem);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.025);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-left {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 2rem;
+      height: 1px;
+      background: var(--orange);
+    }
+
+    .hero-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      line-height: 0.92;
+      letter-spacing: 0.01em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-headline .accent { color: var(--orange); }
+
+    .hero-sub {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--text);
+      max-width: 440px;
+      margin: 1.8rem 0 2.5rem;
+      font-weight: 300;
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .badge-sol { border-color: rgba(153,69,255,0.4); color: #9945FF; }
+    .badge-sol .dot { width: 6px; height: 6px; background: #9945FF; border-radius: 50%; }
+
+    .badge-supply { border-color: rgba(181,210,21,0.35); color: var(--lime); }
+    .badge-supply .dot { width: 6px; height: 6px; background: var(--lime); border-radius: 50%; animation: pulse 2s infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.7); }
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.08);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover::after { opacity: 1; }
+
+    .btn-discord {
+      background: #5865F2;
+      color: #fff;
+    }
+
+    .btn-x {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--border);
+    }
+
+    .btn-x:hover { border-color: var(--lime); color: var(--lime); }
+
+    .hero-tagline {
+      margin-top: 2.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero-right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo-container {
+      position: relative;
+      width: clamp(260px, 35vw, 460px);
+      aspect-ratio: 1;
+    }
+
+    .logo-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .logo-frame {
+      position: absolute;
+      inset: -12px;
+      border: 1px solid var(--orange);
+      border-radius: 4px;
+      opacity: 0.3;
+    }
+
+    .logo-frame-2 {
+      position: absolute;
+      inset: -24px;
+      border: 1px solid var(--lime);
+      border-radius: 4px;
+      opacity: 0.12;
+    }
+
+    .logo-label {
+      position: absolute;
+      bottom: -2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* DIVIDER */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 2.5rem;
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 6rem 2.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 1.5rem;
+      height: 1px;
+      background: var(--orange);
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      margin-bottom: 2rem;
+    }
+
+    /* ABOUT */
+    #about .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-body {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text);
+      font-weight: 300;
+    }
+
+    .about-body p { margin-bottom: 1.2rem; }
+
+    .why-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .why-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.2rem 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--lime);
+      font-size: 0.9rem;
+      color: var(--text);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .why-list li:hover {
+      background: #1a1a1a;
+      border-left-color: var(--orange);
+    }
+
+    .why-list li::before {
+      content: '→';
+      color: var(--lime);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ROADMAP */
+    #roadmap { max-width: 1200px; }
+
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .phase-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      position: relative;
+      transition: border-color 0.25s;
+      overflow: hidden;
+    }
+
+    .phase-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--orange);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .phase-card:hover::before { transform: scaleX(1); }
+    .phase-card:hover { border-color: rgba(232,82,10,0.3); }
+
+    .phase-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      line-height: 1;
+      color: rgba(255,255,255,0.04);
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .phase-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.5rem;
+    }
+
+    .phase-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      margin-bottom: 1.2rem;
+    }
+
+    .phase-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .phase-items li {
+      font-size: 0.85rem;
+      color: var(--text);
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+    }
+
+    .phase-items li::before {
+      content: '—';
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      flex-shrink: 0;
+    }
+
+    .phase-goal {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--lime);
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .phase-goal strong {
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    /* COMMUNITY */
+    #community {
+      text-align: center;
+      padding: 6rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #community::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(232,82,10,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .community-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+
+    .community-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: 0.95;
+      color: var(--white);
+      margin-bottom: 2rem;
+    }
+
+    .community-title span { color: var(--orange); }
+
+    .community-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin: 2.5rem 0;
+      text-align: left;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .action-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .action-item span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--lime);
+    }
+
+    .community-cta {
+      margin-top: 2rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .community-cta strong {
+      color: var(--lime);
+      display: block;
+      font-size: 1.1rem;
+      letter-spacing: 0.3em;
+      margin-top: 0.4rem;
+    }
+
+    .community-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    /* FAQ */
+    #faq { max-width: 800px; }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--border);
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-item:last-child { border-bottom: none; }
+
+    .faq-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.3rem 1.8rem;
+      background: var(--card);
+      border: none;
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      gap: 1rem;
+    }
+
+    .faq-question:hover { background: #1c1c1c; color: var(--lime); }
+    .faq-question.active { color: var(--orange); background: #181818; }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      position: relative;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .faq-icon::before,
+    .faq-icon::after {
+      content: '';
+      position: absolute;
+      background: currentColor;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .faq-icon::before { width: 8px; height: 1px; }
+    .faq-icon::after { width: 1px; height: 8px; }
+
+    .faq-question.active .faq-icon::after { transform: rotate(90deg); opacity: 0; }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), padding 0.35s;
+      background: #111;
+    }
+
+    .faq-answer.open { max-height: 300px; }
+
+    .faq-answer-inner {
+      padding: 0 1.8rem 1.3rem;
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.7;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .faq-answer-inner .faq-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.7rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      border-radius: 2px;
+    }
+
+    .faq-badge-sol { background: rgba(153,69,255,0.15); color: #9945FF; border: 1px solid rgba(153,69,255,0.3); }
+    .faq-badge-supply { background: rgba(181,210,21,0.1); color: var(--lime); border: 1px solid rgba(181,210,21,0.25); }
+    .faq-badge-tba { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+    }
+
+    .footer-logo span { color: var(--orange); }
+
+    .footer-tagline {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-top: 0.3rem;
+    }
+
+    .footer-copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--lime); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .hero-left > * {
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-left > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero-left > *:nth-child(3) { animation-delay: 0.3s; }
+    .hero-left > *:nth-child(4) { animation-delay: 0.4s; }
+    .hero-left > *:nth-child(5) { animation-delay: 0.5s; }
+    .hero-left > *:nth-child(6) { animation-delay: 0.6s; }
+
+    .hero-right {
+      animation: fadeIn 1.2s ease both;
+      animation-delay: 0.4s;
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+
+      #hero {
+        grid-template-columns: 1fr;
+        padding: 7rem 1.5rem 4rem;
+        gap: 3rem;
+        text-align: center;
+      }
+
+      .hero-eyebrow { justify-content: center; }
+      .hero-sub { margin-left: auto; margin-right: auto; }
+      .hero-badges { justify-content: center; }
+      .hero-buttons { justify-content: center; }
+      .hero-tagline { text-align: center; }
+
+      .hero-right { order: -1; }
+      .logo-container { width: 220px; }
+
+      section { padding: 4rem 1.5rem; }
+
+      #about .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+
+      .roadmap-grid { grid-template-columns: 1fr; }
+
+      .community-actions { grid-template-columns: 1fr; }
+
+      footer { flex-direction: column; align-items: center; text-align: center; }
+      .footer-copy { text-align: center; }
+
+      .section-divider { margin: 0 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-headline { font-size: 3rem; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">THE <span>FADE</span> COLLECTIVE</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#community">Community</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div id="hero">
+    <div class="hero-bg-text">FADE</div>
+    <div class="hero-left">
+      <p class="hero-eyebrow">NFT Collection · Solana</p>
+      <h1 class="hero-headline">THE<br/>FADE<br/><span class="accent">COLLECTIVE.</span></h1>
+      <p class="hero-sub">A limited collection of 2,222 pieces on Solana where digital art meets community-driven culture.</p>
+
+      <div class="hero-badges">
+        <span class="badge badge-sol"><span class="dot"></span> Solana</span>
+        <span class="badge badge-supply"><span class="dot"></span> 2,222 Supply</span>
+      </div>
+
+      <div class="hero-buttons">
+        <a href="https://discord.gg/S7knuKHbt" target="_blank" rel="noopener noreferrer" class="btn btn-discord">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M13.545 1.007A13.19 13.19 0 0 0 10.297 0c-.14.253-.304.594-.416.863a12.28 12.28 0 0 0-3.76 0C6.009.594 5.841.253 5.7 0A13.17 13.17 0 0 0 2.45 1.01C.353 4.1-.216 7.113.068 10.083a13.33 13.33 0 0 0 4.066 2.063c.328-.447.62-.923.871-1.424a8.66 8.66 0 0 1-1.37-.663c.115-.084.227-.172.336-.263a9.503 9.503 0 0 0 8.058 0c.11.091.223.179.336.263-.437.26-.9.484-1.372.665.251.501.542.977.87 1.423a13.3 13.3 0 0 0 4.07-2.063c.333-3.484-.568-6.468-2.388-9.077ZM5.347 8.26c-.812 0-1.48-.748-1.48-1.666 0-.917.651-1.667 1.48-1.667.83 0 1.494.75 1.48 1.667 0 .918-.65 1.666-1.48 1.666Zm5.306 0c-.812 0-1.48-.748-1.48-1.666 0-.917.651-1.667 1.48-1.667.83 0 1.494.75 1.48 1.667 0 .918-.65 1.666-1.48 1.666Z" fill="currentColor"/></svg>
+          Join Discord
+        </a>
+        <a href="https://x.com/thefadeco?s=21" target="_blank" rel="noopener noreferrer" class="btn btn-x">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M11.025.656h2.147L8.482 5.92 14 13.344H9.68L6.294 8.886l-3.87 4.458H.275l5.01-5.574L0 .656h4.43L7.518 4.73 11.025.656Zm-.753 11.377h1.19L3.78 1.875H2.504l7.768 10.158Z" fill="currentColor"/></svg>
+          Follow on X
+        </a>
+      </div>
+
+      <p class="hero-tagline">Collectors. Degens. Visionaries.</p>
+    </div>
+
+    <div class="hero-right">
+      <div class="logo-container">
+        <div class="logo-frame-2"></div>
+        <div class="logo-frame"></div>
+        <img src="IMG_1540.jpeg" alt="The Fade Collective — Project Identity" />
+        <span class="logo-label">THE FADE COLLECTIVE — 2226</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label reveal">About</p>
+    <h2 class="section-title reveal">What is The<br/>FADE Collective?</h2>
+    <div class="about-grid">
+      <div class="about-body reveal">
+        <p>The FADE Collective is building more than an NFT collection.</p>
+        <p>We're building a community of collectors, degens, and visionaries who believe culture comes first. Our mission is simple: build something worth staying for and create a community that grows together.</p>
+        <p>Whether you're here to collect, build, create, or simply be early — welcome.</p>
+      </div>
+      <div class="reveal">
+        <p class="section-label" style="margin-bottom:1.2rem;">Why Fade?</p>
+        <ul class="why-list">
+          <li>Community First</li>
+          <li>Limited Collection (2,222 Supply)</li>
+          <li>Culture Driven</li>
+          <li>Built Together</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ROADMAP -->
+  <section id="roadmap" style="max-width:1200px;margin:0 auto;">
+    <p class="section-label reveal">Roadmap</p>
+    <h2 class="section-title reveal">The Path Forward.</h2>
+    <div class="roadmap-grid">
+
+      <div class="phase-card reveal">
+        <div class="phase-num">0</div>
+        <p class="phase-tag">Phase 0</p>
+        <h3 class="phase-title">Foundation</h3>
+        <ul class="phase-items">
+          <li>Spreading awareness and building brand identity</li>
+          <li>Implementing artistic vision</li>
+          <li>Building community</li>
+          <li>Website development</li>
+          <li>Whitelist campaigns and giveaways</li>
+        </ul>
+        <div class="phase-goal"><strong>Goal</strong>Build genuine connections and create a strong foundation.</div>
+      </div>
+
+      <div class="phase-card reveal">
+        <div class="phase-num">1</div>
+        <p class="phase-tag">Phase 1</p>
+        <h3 class="phase-title">Mint Launch</h3>
+        <ul class="phase-items">
+          <li>Mint details announced later</li>
+          <li>Fair and transparent launch</li>
+          <li>Secondary market activation</li>
+          <li>Marketing expansion</li>
+        </ul>
+        <div class="phase-goal"><strong>Goal</strong>Successful launch with happy holders and strong momentum.</div>
+      </div>
+
+      <div class="phase-card reveal">
+        <div class="phase-num">2</div>
+        <p class="phase-tag">Phase 2</p>
+        <h3 class="phase-title">Utility</h3>
+        <ul class="phase-items">
+          <li>Exclusive content and unlocks</li>
+          <li>Merch and physical products</li>
+          <li>Staking</li>
+          <li>Revenue share opportunities</li>
+          <li>BASC rewards</li>
+        </ul>
+        <div class="phase-goal"><strong>Goal</strong>Create utility worth not fading.</div>
+      </div>
+
+      <div class="phase-card reveal">
+        <div class="phase-num">3</div>
+        <p class="phase-tag">Phase 3</p>
+        <h3 class="phase-title">Expansion &amp; Legacy</h3>
+        <ul class="phase-items">
+          <li>Potential ecosystem expansion</li>
+          <li>Branding and trademark development</li>
+          <li>Governance systems</li>
+        </ul>
+        <div class="phase-goal"><strong>Goal</strong>Build something lasting.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- COMMUNITY -->
+  <section id="community" style="max-width:100%;padding:6rem 2.5rem;">
+    <div class="community-inner">
+      <p class="section-label reveal" style="justify-content:center;">Community</p>
+      <h2 class="community-title reveal">We Move<br/><span>Together.</span></h2>
+
+      <div class="community-actions reveal">
+        <div class="action-item"><span>01</span> Stay active in Discord</div>
+        <div class="action-item"><span>02</span> Engage on X</div>
+        <div class="action-item"><span>03</span> Share the project</div>
+        <div class="action-item"><span>04</span> Give feedback</div>
+      </div>
+
+      <p class="community-cta reveal">
+        You're early.
+        <strong>Let's make this legendary.</strong>
+      </p>
+
+      <div class="community-buttons reveal">
+        <a href="https://discord.gg/S7knuKHbt" target="_blank" rel="noopener noreferrer" class="btn btn-discord">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M13.545 1.007A13.19 13.19 0 0 0 10.297 0c-.14.253-.304.594-.416.863a12.28 12.28 0 0 0-3.76 0C6.009.594 5.841.253 5.7 0A13.17 13.17 0 0 0 2.45 1.01C.353 4.1-.216 7.113.068 10.083a13.33 13.33 0 0 0 4.066 2.063c.328-.447.62-.923.871-1.424a8.66 8.66 0 0 1-1.37-.663c.115-.084.227-.172.336-.263a9.503 9.503 0 0 0 8.058 0c.11.091.223.179.336.263-.437.26-.9.484-1.372.665.251.501.542.977.87 1.423a13.3 13.3 0 0 0 4.07-2.063c.333-3.484-.568-6.468-2.388-9.077ZM5.347 8.26c-.812 0-1.48-.748-1.48-1.666 0-.917.651-1.667 1.48-1.667.83 0 1.494.75 1.48 1.667 0 .918-.65 1.666-1.48 1.666Zm5.306 0c-.812 0-1.48-.748-1.48-1.666 0-.917.651-1.667 1.48-1.667.83 0 1.494.75 1.48 1.667 0 .918-.65 1.666-1.48 1.666Z" fill="currentColor"/></svg>
+          Join Discord
+        </a>
+        <a href="https://x.com/thefadeco?s=21" target="_blank" rel="noopener noreferrer" class="btn btn-x">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M11.025.656h2.147L8.482 5.92 14 13.344H9.68L6.294 8.886l-3.87 4.458H.275l5.01-5.574L0 .656h4.43L7.518 4.73 11.025.656Zm-.753 11.377h1.19L3.78 1.875H2.504l7.768 10.158Z" fill="currentColor"/></svg>
+          Follow on X
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <p class="section-label reveal">FAQ</p>
+    <h2 class="section-title reveal">Quick Answers.</h2>
+
+    <div class="faq-list reveal">
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          What is the supply?
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <span class="faq-badge faq-badge-supply">2,222 NFTs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Which blockchain?
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <span class="faq-badge faq-badge-sol">⬡ Solana</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          When is the mint date?
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <span class="faq-badge faq-badge-tba">TBA — Follow X for updates</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          When is the artist reveal?
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <span class="faq-badge faq-badge-tba">TBA — Stay tuned</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Which launchpad?
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            <span class="faq-badge faq-badge-tba">TBA — Announcement coming</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <div class="footer-logo">THE <span>FADE</span> COLLECTIVE</div>
+      <div class="footer-tagline">FADE LIMITS.</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://discord.gg/S7knuKHbt" target="_blank" rel="noopener noreferrer">Discord</a>
+      <a href="https://x.com/thefadeco?s=21" target="_blank" rel="noopener noreferrer">X / Twitter</a>
+    </div>
+    <div class="footer-copy">
+      The FADE Collective © 2026<br/>All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // FAQ accordion
+    function toggleFaq(btn) {
+      const answer = btn.nextElementSibling;
+      const isOpen = answer.classList.contains('open');
+
+      // Close all
+      document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-question').forEach(b => b.classList.remove('active'));
+
+      // Open clicked if it was closed
+      if (!isOpen) {
+        answer.classList.add('open');
+        btn.classList.add('active');
+      }
+    }
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

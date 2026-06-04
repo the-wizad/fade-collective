@@ -728,6 +728,165 @@
 
     .footer-links a:hover { color: var(--lime); }
 
+    /* HERO PARTICLES */
+    .hero-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+      animation: floatParticle linear infinite;
+    }
+
+    @keyframes floatParticle {
+      0%   { opacity: 0; transform: translateY(0) scale(0.5); }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.6; }
+      100% { opacity: 0; transform: translateY(-110vh) scale(1.2); }
+    }
+
+    /* SCANNING LINE on logo */
+    .logo-scan {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    .logo-scan::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--lime), transparent);
+      opacity: 0.7;
+      animation: scanLine 3s ease-in-out infinite;
+      top: 0;
+    }
+
+    @keyframes scanLine {
+      0%   { top: 0%; opacity: 0; }
+      5%   { opacity: 0.7; }
+      95%  { opacity: 0.7; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    /* GLITCH on headline */
+    .hero-headline {
+      position: relative;
+    }
+
+    .hero-headline.glitch-active::before,
+    .hero-headline.glitch-active::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: inherit;
+      line-height: inherit;
+      letter-spacing: inherit;
+      pointer-events: none;
+    }
+
+    .hero-headline.glitch-active::before {
+      color: var(--orange);
+      clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+      transform: translateX(-3px);
+      animation: glitchA 0.15s steps(1) 3;
+    }
+
+    .hero-headline.glitch-active::after {
+      color: var(--lime);
+      clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+      transform: translateX(3px);
+      animation: glitchB 0.15s steps(1) 3;
+    }
+
+    @keyframes glitchA {
+      0%, 100% { transform: translateX(-3px); clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); }
+      33%       { transform: translateX(3px);  clip-path: polygon(0 50%, 100% 50%, 100% 65%, 0 65%); }
+      66%       { transform: translateX(-6px); clip-path: polygon(0 10%, 100% 10%, 100% 25%, 0 25%); }
+    }
+
+    @keyframes glitchB {
+      0%, 100% { transform: translateX(3px);  clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%); }
+      33%       { transform: translateX(-3px); clip-path: polygon(0 30%, 100% 30%, 100% 45%, 0 45%); }
+      66%       { transform: translateX(6px);  clip-path: polygon(0 70%, 100% 70%, 100% 85%, 0 85%); }
+    }
+
+    /* LOGO FLOAT */
+    .logo-container {
+      animation: logoFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-14px); }
+    }
+
+    /* ORANGE GLOW PULSE behind logo */
+    .logo-glow {
+      position: absolute;
+      inset: -40px;
+      background: radial-gradient(ellipse, rgba(232,82,10,0.18) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: glowPulse 4s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.15); }
+    }
+
+    /* COUNTER ROLL for supply badge */
+    .badge-supply .supply-num {
+      display: inline-block;
+      overflow: hidden;
+      height: 1em;
+      vertical-align: bottom;
+    }
+
+    /* TYPEWRITER for eyebrow */
+    .hero-eyebrow .typewriter {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid var(--orange);
+      width: 0;
+      animation: typewrite 1.2s steps(22, end) 0.5s forwards,
+                 blinkCaret 0.75s step-end 0.5s 6;
+    }
+
+    @keyframes typewrite {
+      from { width: 0; }
+      to   { width: 100%; }
+    }
+
+    @keyframes blinkCaret {
+      from, to { border-color: transparent; }
+      50%      { border-color: var(--orange); }
+    }
+
+    /* HERO BG TEXT slow drift */
+    .hero-bg-text {
+      animation: bgDrift 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgDrift {
+      from { transform: translate(-52%, -50%) scaleX(1); }
+      to   { transform: translate(-48%, -50%) scaleX(1.04); }
+    }
+
     /* ANIMATIONS */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(30px); }
@@ -825,9 +984,10 @@
   <!-- HERO -->
   <div id="hero">
     <div class="hero-bg-text">FADE</div>
+    <div class="hero-particles" id="heroParticles"></div>
     <div class="hero-left">
-      <p class="hero-eyebrow">NFT Collection · Solana</p>
-      <h1 class="hero-headline">THE<br/>FADE<br/><span class="accent">COLLECTIVE.</span></h1>
+      <p class="hero-eyebrow"><span class="typewriter">NFT Collection · Solana</span></p>
+      <h1 class="hero-headline" data-text="THE&#10;FADE&#10;COLLECTIVE.">THE<br/>FADE<br/><span class="accent">COLLECTIVE.</span></h1>
       <p class="hero-sub">A limited collection of 2,222 pieces on Solana where digital art meets community-driven culture.</p>
 
       <div class="hero-badges">
@@ -851,10 +1011,12 @@
 
     <div class="hero-right">
       <div class="logo-container">
+        <div class="logo-glow"></div>
         <div class="logo-frame-2"></div>
         <div class="logo-frame"></div>
+        <div class="logo-scan"></div>
         <img src="IMG_1540.jpeg" alt="The Fade Collective — Project Identity" />
-        <span class="logo-label">THE FADE COLLECTIVE — 2222</span>
+        <span class="logo-label">THE FADE COLLECTIVE — 2,222</span>
       </div>
     </div>
   </div>
@@ -1068,23 +1230,82 @@
   </footer>
 
   <script>
-    // FAQ accordion
+    // ── PARTICLES ──────────────────────────────────────────────
+    (function() {
+      const container = document.getElementById('heroParticles');
+      const colors = ['#E8520A', '#B5D215', '#9945FF', '#ffffff'];
+      const count = 28;
+
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random() * 4 + 1.5;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const left = Math.random() * 100;
+        const delay = Math.random() * 12;
+        const duration = Math.random() * 10 + 8;
+        p.style.cssText = `
+          width:${size}px; height:${size}px;
+          background:${color};
+          left:${left}%;
+          bottom:-10px;
+          animation-duration:${duration}s;
+          animation-delay:${delay}s;
+          opacity:0;
+          box-shadow: 0 0 ${size * 3}px ${color};
+        `;
+        container.appendChild(p);
+      }
+    })();
+
+    // ── GLITCH on headline ──────────────────────────────────────
+    (function() {
+      const headline = document.querySelector('.hero-headline');
+      function triggerGlitch() {
+        headline.classList.add('glitch-active');
+        setTimeout(() => headline.classList.remove('glitch-active'), 500);
+        const next = Math.random() * 5000 + 3000;
+        setTimeout(triggerGlitch, next);
+      }
+      setTimeout(triggerGlitch, 2000);
+    })();
+
+    // ── SUPPLY COUNTER ROLL ────────────────────────────────────
+    (function() {
+      const badge = document.querySelector('.badge-supply');
+      if (!badge) return;
+      const target = 2222;
+      let current = 0;
+      const duration = 1800;
+      const startTime = performance.now() + 600;
+
+      function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+      function tick(now) {
+        if (now < startTime) { requestAnimationFrame(tick); return; }
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        current = Math.floor(easeOut(progress) * target);
+        badge.innerHTML = `<span class="dot"></span> ${current.toLocaleString()} Supply`;
+        if (progress < 1) requestAnimationFrame(tick);
+        else badge.innerHTML = `<span class="dot"></span> 2,222 Supply`;
+      }
+      requestAnimationFrame(tick);
+    })();
+
+    // ── FAQ accordion ──────────────────────────────────────────
     function toggleFaq(btn) {
       const answer = btn.nextElementSibling;
       const isOpen = answer.classList.contains('open');
-
-      // Close all
       document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
       document.querySelectorAll('.faq-question').forEach(b => b.classList.remove('active'));
-
-      // Open clicked if it was closed
       if (!isOpen) {
         answer.classList.add('open');
         btn.classList.add('active');
       }
     }
 
-    // Scroll reveal
+    // ── SCROLL REVEAL ──────────────────────────────────────────
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver(entries => {
       entries.forEach((entry, i) => {
@@ -1094,7 +1315,6 @@
         }
       });
     }, { threshold: 0.1 });
-
     reveals.forEach(el => observer.observe(el));
   </script>
 
